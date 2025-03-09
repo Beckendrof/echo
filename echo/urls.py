@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('my_form.urls')),  # Include app URLs
+    path('', include('my_form.urls')),  # Replace 'yourappname' with your actual app name
 ]
 
+# Add this if you need to handle media files (like resume uploads)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
