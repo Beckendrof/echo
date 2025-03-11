@@ -35,5 +35,11 @@ def apply_view(request):
     
     return render(request, 'apply.html')
 
+def apply(request):
+    return render(request, 'apply.html')
+
+def register(request):
+    return render(request, 'register.html')
+
 def home_view(request):
     return render(request, 'home.html')
