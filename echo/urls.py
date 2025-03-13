@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('my_form.urls')),  # Replace 'yourappname' with your actual app name
+    path('', include('apps.myForm.urls')),
 ]
 
 # Add this if you need to handle media files (like resume uploads)
