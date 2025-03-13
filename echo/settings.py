@@ -10,7 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+"""
+Fetching database password from environment variable.
+
+Change the below as required.
+
+"""
+
 from pathlib import Path
+from utils import secrets_manager as sm
+
+import configparser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,6 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-2p_hy34ih=p6n=f)8#3gkk8)@09%v%v^7*i6a^l7=t9@krtpc%'
@@ -69,17 +81,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'echo.wsgi.application'
 
+config = configparser.ConfigParser()
+config.read('echo/config.ini')
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+secrets = sm.get_secret(config['AWS_RDS']['SECRET_NAME'], config['AWS_RDS']['REGION_NAME'])
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'echo_mysql',
+        'USER': secrets.get('username'),
+        'PASSWORD': secrets.get('password'),
+        'HOST': 'database-1.crqa8uig4sti.us-west-1.rds.amazonaws.com',
+        'PORT': secrets.get('port', '3306'),
     }
-}
-
+} 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
