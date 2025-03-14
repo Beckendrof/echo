@@ -86,16 +86,19 @@ config.read('echo/config.ini')
 
 secrets = sm.get_secret(config['AWS_RDS']['SECRET_NAME'], config['AWS_RDS']['REGION_NAME'])
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'echo_mysql',
-        'USER': secrets.get('username'),
-        'PASSWORD': secrets.get('password'),
-        'HOST': 'database-1.crqa8uig4sti.us-west-1.rds.amazonaws.com',
-        'PORT': secrets.get('port', '3306'),
+try:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'echo_mysql',
+            'USER': secrets.get('username'),
+            'PASSWORD': secrets.get('password'),
+            'HOST': 'database-1.crqa8uig4sti.us-west-1.rds.amazonaws.com',
+            'PORT': secrets.get('port', '3306'),
+        }
     }
-} 
+except:
+    pass
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
