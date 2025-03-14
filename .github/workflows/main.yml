@@ -8,11 +8,23 @@ on:
     branches:
       - main
 
+permissions: 
+  id-token: write  # OIDC requirement
+  contents: read
+      
 jobs:
   test_server:
     runs-on: ubuntu-latest
+    # environment: aws-mysql
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      
+      - name: Configure AWS Creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::637423382885:role/echo
+          role-session-name: github-actions-federation
+          aws-region: us-west-1
       
       - name: Set up Python
         uses: actions/setup-python@v4
