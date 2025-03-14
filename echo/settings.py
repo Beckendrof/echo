@@ -19,6 +19,12 @@ Change the below as required.
 
 from pathlib import Path
 from utils import secrets_manager as sm
+
+import os
+import logging
+import time
+import mysql.connector
+from django.core.exceptions import ImproperlyConfigured
 import configparser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -86,8 +92,18 @@ config.read('echo/config.ini')
 
 secrets = sm.get_secret(config['AWS_RDS']['SECRET_NAME'], config['AWS_RDS']['REGION_NAME'])
 
-try:
-    DATABASES = {
+def configure_database():
+    if os.environ.get('GITHUB_ACTIONS') == 'true':
+        # Bypass the connection test in GitHub Actions.
+        logger.warning("GitHub Actions detected, bypassing RDS connection test.")
+        return {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'db.sqlite3'),
+            }
+        }
+    try:
+        DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'echo_mysql',
@@ -97,8 +113,26 @@ try:
             'PORT': secrets.get('port', '3306'),
         }
     }
-except:
-    pass
+        # Attempt a test connection.
+        from django.db import connections
+        connections['default'].cursor().execute('SELECT 1;')
+        logger.info("Database connection successful.")
+        return DATABASES
+    except mysql.connector.Error as e:
+        logger.error(f"Database connection error: {e}")
+        # Attempt to run locally with SQLite
+        logger.warning("Falling back to local SQLite database.")
+        return {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'db.sqlite3'),
+            }
+        }
+    except Exception as e:
+        logger.error(f"An unexpected error occurred during database configuration: {e}")
+        raise ImproperlyConfigured(f"An unexpected error occurred during database configuration: {e}")
+
+DATABASES = configure_database()
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
