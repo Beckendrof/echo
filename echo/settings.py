@@ -113,8 +113,8 @@ def configure_database():
         }
     }
         # Attempt a test connection.
-        from django.db import connections
-        connections['default'].cursor().execute('SELECT 1;')
+        # from django.db import connections
+        # connections['default'].cursor().execute('SELECT 1;')
         # logger.info("Database connection successful.")
         return DATABASES
     except Exception as e:
