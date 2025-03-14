@@ -23,7 +23,7 @@ jobs:
       - name: Configure AWS Creds
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::637423382885:role/echo
+          role-to-assume: arn:aws:iam::637423382885:role/Echo
           aws-region: us-west-1
       
       - name: Set up Python
