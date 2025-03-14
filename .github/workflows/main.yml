@@ -11,6 +11,7 @@ on:
 jobs:
   test_server:
     runs-on: ubuntu-latest
+    environment: aws-mysql
     steps:
       - uses: actions/checkout@v3
       
