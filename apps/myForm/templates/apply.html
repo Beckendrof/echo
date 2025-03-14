@@ -1,13 +1,15 @@
 {% extends "home.html" %}
 
 {% block title %}Apply{% endblock %}
+{% load static %}
+
 
 {% block content %}
 
 <div class="container d-flex justify-content-center align-items-center py-2">
     <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
         <h1 class="text-center mb-4">Apply</h1>
-        <form method="post" action="#" enctype="multipart/form-data">
+        <form method="post" action="{% url 'apply_view' %}">
             {% csrf_token %}
 
             <!-- Personal Information -->
@@ -74,5 +76,7 @@
         </form>
     </div>
 </div>
+
+<script src="{% static 'js/apply.js' %}"></script>
 
 {% endblock %}

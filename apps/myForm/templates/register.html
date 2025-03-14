@@ -7,7 +7,7 @@
 <div class="container d-flex justify-content-center align-items-center py-4">
     <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
         <h1 class="text-center mb-4">Register</h1>
-        <form method="post" action="#">
+        <form method="post" action="{% url 'register_view' %}">
             {% csrf_token %}
             
             <!-- Basic Demographic Information -->
