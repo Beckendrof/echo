@@ -8,14 +8,14 @@ on:
     branches:
       - main
 
+permissions: 
+  id-token: write  # OIDC requirement
+  contents: read
+      
 jobs:
   test_server:
-    permissions: 
-      id-token: write  # OIDC requirement
-      contents: read
-      
     runs-on: ubuntu-latest
-    environment: aws-mysql
+    # environment: aws-mysql
     steps:
       - uses: actions/checkout@v4
       
