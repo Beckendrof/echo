@@ -57,36 +57,35 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 // Get file info first
                 const file = fileInput.files[0];
-                const fileSize = file.size;
-                const fileType = file.type;
-                const fileName = file.name;
                 
-                // Create URLSearchParams (for url-encoded format) instead of FormData
-                const formData = new URLSearchParams(new FormData(form));
+                // Create FormData from the form
+                const formData = new FormData(form);
+                
+                // Make sure file is included (should be automatic if input is in the form)
+                // But let's ensure it's there with the correct field name
+                formData.set('resume', file);
                 
                 // Add file metadata
-                formData.append('file_size', fileSize);
-                formData.append('file_type', fileType);
-                formData.append('file_name', fileName);
+                formData.append('file_size', file.size);
+                formData.append('file_type', file.type);
+                formData.append('file_name', file.name);
                 
                 fetch('/apply/submit/', {
                     method: 'POST',
-                    body: formData.toString(), // Convert to string
+                    body: formData, // Send FormData directly - don't convert to string
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        // IMPORTANT: Do NOT set Content-Type when sending files
+                        // Let the browser set it automatically with correct boundary
                         'X-Requested-With': 'XMLHttpRequest',
                         'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
                     },
-                    credentials: 'same-origin'
+                    credentials: 'same-origin',
+                    redirect: 'follow'
                 })
                 .then(response => {
                     if (response.ok) {
-                        return response.text().then(data => {
-                            // Instead of redirecting, handle the response from Django
-                            console.log('Application submitted successfully');
-                            // You could display a success message or update UI here
-                            // For example: document.getElementById('result-container').innerHTML = data;
-                        });
+                        // Handle the redirect from Django
+                        window.location.href = response.url;
                     } else {
                         alert('Failed to submit application. Please try again.');
                     }
@@ -99,5 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     } else {
         console.error('Form or file input not found');
-    }
+    }    
+    
 });
