@@ -38,7 +38,7 @@ def apply_view(request):
             'email': request.POST.get('email', ''),
             'phone': request.POST.get('phone', '')
         }
-        
+
         if 'resume' in request.FILES:
             application_data['resume'] = request.FILES['resume']
         

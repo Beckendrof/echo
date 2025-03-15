@@ -9,7 +9,7 @@
 <div class="container d-flex justify-content-center align-items-center py-2">
     <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
         <h1 class="text-center mb-4">Apply</h1>
-        <form method="post" action="{% url 'apply_view' %}">
+        <form method="post" id="app-form" action="{% url 'apply_view' %}" enctype="multipart/form-data">
             {% csrf_token %}
 
             <!-- Personal Information -->
@@ -68,9 +68,8 @@
             <h5 class="mt-4 mb-3">Additional Information</h5>
             <div class="mb-3">
                 <label for="resume" class="form-label">Upload Resume</label>
-                <input type="file" id="resume" name="resume" class="form-control">
+                <input type="file" id="resume" name="resume" class="form-control" > {% comment %} accept=".pdf" {% endcomment %}
             </div>
-
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary w-100 mt-3">Submit Application</button>
         </form>
