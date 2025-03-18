@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const jobTitleInput = document.getElementById("job_title");
     const companyNameInput = document.getElementById("company_name");
     const yearsInput = document.getElementById("years");
+    const form = document.querySelector('form'); // Adjust selector as needed
+    const fileInput = document.querySelector('input[type="file"]'); // Adjust selector as needed
 
     let experienceCount = 0;
 
@@ -47,4 +49,55 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+        
+    if (form && fileInput) {
+        form.addEventListener('submit', function(e) {
+            if (fileInput.files.length > 0) {
+                e.preventDefault();
+                
+                // Get file info first
+                const file = fileInput.files[0];
+                
+                // Create FormData from the form
+                const formData = new FormData(form);
+                
+                // Make sure file is included (should be automatic if input is in the form)
+                // But let's ensure it's there with the correct field name
+                formData.set('resume', file);
+                
+                // Add file metadata
+                formData.append('file_size', file.size);
+                formData.append('file_type', file.type);
+                formData.append('file_name', file.name);
+                
+                fetch('/apply/submit/', {
+                    method: 'POST',
+                    body: formData, // Send FormData directly - don't convert to string
+                    headers: {
+                        // IMPORTANT: Do NOT set Content-Type when sending files
+                        // Let the browser set it automatically with correct boundary
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    credentials: 'same-origin',
+                    redirect: 'follow'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Handle the redirect from Django
+                        window.location.href = response.url;
+                    } else {
+                        alert('Failed to submit application. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        });
+    } else {
+        console.error('Form or file input not found');
+    }    
+    
 });
