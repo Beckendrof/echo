@@ -18,8 +18,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      # Only configure AWS credentials for protected branches like staging/production
-      # Skip for feature branches and PRs
+      # Add debugging step here, before AWS credential configuration
+      - name: Debug OIDC claims
+        run: |
+          GITHUB_CONTEXT=$(echo $GITHUB_CONTEXT | jq -c .)
+          echo "GitHub context: $GITHUB_CONTEXT"
+          echo "GitHub ref: ${{ github.ref }}"
+          echo "GitHub event name: ${{ github.event_name }}"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
       - name: Configure AWS Credentials
         if: startsWith(github.ref, 'refs/heads/test-dev')
         uses: aws-actions/configure-aws-credentials@v4
