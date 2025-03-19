@@ -3,7 +3,7 @@ name: Django Server Test
 on:
   push:
     branches:
-      - main
+      - '*'  # Run on all branch pushes
   pull_request:
     branches:
       - main
@@ -15,11 +15,13 @@ permissions:
 jobs:
   test_server:
     runs-on: ubuntu-latest
-    # environment: aws-mysql
     steps:
       - uses: actions/checkout@v4
       
-      - name: Configure AWS Creds
+      # Only configure AWS credentials for protected branches like staging/production
+      # Skip for feature branches and PRs
+      - name: Configure AWS Credentials
+        if: startsWith(github.ref, 'refs/heads/test-dev')
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::637423382885:role/echo
