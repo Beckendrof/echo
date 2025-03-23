@@ -1,30 +1,42 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from utils.storage.factory import get_job_application_repository, get_user_registration_repository
 
-def register_view(request):
-    if request.method == 'POST':
-        repo = get_user_registration_repository()
+# def register_view(request):
+#     if request.method == 'POST':
+#         repo = get_user_registration_repository()
         
-        try:
-            user_data = {
-                'first_name': request.POST.get('first_name', ''),
-                'last_name': request.POST.get('last_name', ''),
-                'email': request.POST.get('email', ''),
-                'username': request.POST.get('username', ''),
-                'password': request.POST.get('password', '')
-            }
+#         try:
+#             user_data = {
+#                 'first_name': request.POST.get('first_name', ''),
+#                 'last_name': request.POST.get('last_name', ''),
+#                 'email': request.POST.get('email', ''),
+#                 'username': request.POST.get('username', ''),
+#                 'password': request.POST.get('password', '')
+#             }
             
-            repo.create(user_data)
-            messages.success(request, "Registration successful!")
+#             repo.create(user_data)
+#             messages.success(request, "Registration successful!")
             
-            return redirect('home')
-        except Exception as e:
-            return redirect('register')
-    else:
-        return redirect('register')
+#             return redirect('home')
+#         except Exception as e:
+#             return redirect('register')
+#     else:
+#         return redirect('register')
 
-
+def login_view(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("dashboard")
+        else:
+            messages.error(request, "Invalid email or password.")
+    
+    return render(request, "login.html")
 
 def apply_view(request):
     if request.method == 'POST':
@@ -68,11 +80,14 @@ def apply_view(request):
         return redirect('apply')
 
 
-def apply(request):
-    return render(request, 'apply.html')
+def dashboard(request):
+    return render(request, 'dashboard.html')
 
 def register(request):
     return render(request, 'register.html')
 
-def home_view(request):
+def login(request):
+    return render(request, 'login.html')
+
+def home(request):
     return render(request, 'home.html')

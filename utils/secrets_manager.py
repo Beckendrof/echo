@@ -4,7 +4,7 @@ try:
     import boto3
     from botocore.exceptions import ClientError
 
-except Exceptiion as e:
+except Exception as e:
     raise (f"Some modules are missing : {e}")
 
 

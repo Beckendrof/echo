@@ -1,0 +1,161 @@
+{% extends "register.html" %}
+{% load static %}
+
+
+{% block content %}
+
+        <nav class="py-6">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="font-bold text-2xl">Echo</div>
+                <div class="flex space-x-4">
+                    <a href="{% url 'login' %}" class="text-sm font-medium text-gray-700 hover:text-gray-900">Login</a>
+                    <a href="{% url 'register' %}" class="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-medium transition duration-300 hover:bg-gray-800">Sign Up</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="flex min-h-screen">
+            <div class="max-w-7xl mx-auto py-20 flex flex-col md:flex-row items-center">
+                <!-- Left Content -->
+                <div class="w-full md:w-1/2 px-4 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">Streamline Your Workflow, Amplify Your Content</h1>
+                    <p class="text-xl text-gray-600 mb-8">Echo provides a secure collaboration space for YouTube creators and editors to work efficiently without sharing account credentials.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        {% comment %} <a href="{% url 'signup' %}" class="text-center bg-gray-900 text-white px-8 py-3 rounded-full text-sm font-medium transition duration-300 hover:bg-gray-800">Get Started</a> {% endcomment %}
+                        <a href="#how-it-works" class="text-center bg-white text-gray-900 px-8 py-3 rounded-full text-sm font-medium border border-gray-300 transition duration-300 hover:bg-gray-50">Learn More</a>
+                    </div>
+                </div>
+                
+                <!-- Featured Card -->
+                <div class="w-full md:w-1/2 px-4">
+                    <div class="bg-gray-50 rounded-lg shadow-md p-8 transform transition duration-500 hover:shadow-lg">
+                        <h2 class="text-2xl font-bold mb-6">Why Choose Echo?</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium">Enhanced Security</h3>
+                                    <p class="mt-1 text-gray-600">Editors never need access to your YouTube account credentials.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium">Streamlined Reviews</h3>
+                                    <p class="mt-1 text-gray-600">Simple approval workflow with frame-by-frame commentary.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-medium">Granular Permissions</h3>
+                                    <p class="mt-1 text-gray-600">Control exactly what your editors can access and modify.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex space-x-4">
+                            {% comment %} <a href="{% url 'signup' %}?role=creator" class="w-1/2 text-center bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-medium transition duration-300 hover:bg-gray-800">Creator Sign Up</a>
+                            <a href="{% url 'signup' %}?role=editor" class="w-1/2 text-center bg-white text-gray-900 px-6 py-3 rounded-full text-sm font-medium border border-gray-300 transition duration-300 hover:bg-gray-50">Editor Sign Up</a> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Cards -->
+        <section id="how-it-works" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-16">How Echo Works</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-lg shadow-md p-8 transform transition duration-500 hover:shadow-lg">
+                        <div class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center mb-6">
+                            <span class="text-xl font-bold">1</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Connect Editors</h3>
+                        <p class="text-gray-600">Invite editors to collaborate on your channel without sharing your password.</p>
+                    </div>
+                    
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-lg shadow-md p-8 transform transition duration-500 hover:shadow-lg">
+                        <div class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center mb-6">
+                            <span class="text-xl font-bold">2</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Review Content</h3>
+                        <p class="text-gray-600">Editors upload videos for your review, complete with metadata and thumbnails.</p>
+                    </div>
+                    
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-lg shadow-md p-8 transform transition duration-500 hover:shadow-lg">
+                        <div class="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center mb-6">
+                            <span class="text-xl font-bold">3</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Publish Securely</h3>
+                        <p class="text-gray-600">Approve and publish directly to YouTube with one click using secure OAuth.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Testimonials -->
+        <section class="py-20">
+            <div class="max-w-5xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-16">What Creators Are Saying</h2>
+                
+                <div class="bg-gray-50 rounded-lg shadow-md p-8">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="h-20 w-20 rounded-full bg-gray-300 mb-6"></div>
+                        <blockquote class="text-xl text-gray-700 italic mb-6">"Echo has completely transformed how I work with my editing team. No more sharing passwords or waiting for files in Dropbox."</blockquote>
+                        <cite class="font-medium">— Sarah Chen, Travel Vlogger</cite>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        {% comment %} <section class="py-20 bg-gray-900 text-white">
+            <div class="max-w-5xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-6">Ready to streamline your content workflow?</h2>
+                <p class="text-xl mb-8 text-gray-300">Join thousands of creators who trust Echo for secure collaboration.</p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="{% url 'register' %}?role=creator" class="bg-white text-gray-900 px-8 py-3 rounded-full text-sm font-medium transition duration-300 hover:bg-gray-100">Start as a Creator</a>
+                    <a href="{% url 'signup' %}?role=editor" class="bg-transparent text-white px-8 py-3 rounded-full text-sm font-medium border border-white transition duration-300 hover:bg-white hover:text-gray-900">Join as an Editor</a>
+                </div>
+            </div>
+        </section> {% endcomment %}
+        
+        <!-- Footer -->
+        <footer class="py-10 border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="font-medium mb-4 md:mb-0">© 2025 Echo. All rights reserved.</div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-sm text-gray-600 hover:text-gray-900">Terms</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-gray-900">Privacy</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-gray-900">Support</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+<script src="{% static 'js/apply.js' %}"></script>
+
+{% endblock %}
