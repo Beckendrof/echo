@@ -1,4 +1,4 @@
-{% extends "register.html" %}
+{% extends "home.html" %}
 
 {% block content %}
 <body class="bg-white text-gray-900 flex items-center justify-center h-screen">
@@ -34,7 +34,7 @@
                             <a href="#" class="text-sm text-gray-900 hover:underline">Forgot password?</a>
                         </div>
 
-                        <button type="submit" href="{% url 'dashboard' %}"
+                        <button type="submit" href="#"
                             class="w-full bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-medium transition duration-300 ease-in-out hover:bg-gray-800">
                             Log In
                         </button>
@@ -42,7 +42,7 @@
 
                     <p class="mt-8 text-center text-sm text-gray-600">
                         Don't have an account? 
-                        <a href="{% url 'signup' %}" class="font-medium text-gray-900 hover:underline">Sign up</a>
+                        <a href="{% url 'home' %}" class="font-medium text-gray-900 hover:underline">Sign up</a>
                     </p>
                 </div>
             </div>

@@ -1,40 +1,83 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+import logging
+from .forms import CombinedRegistrationForm
 from django.contrib.auth import authenticate, login
 from utils.storage.factory import get_job_application_repository, get_user_registration_repository
+logger = logging.getLogger('django')
 
-# def register_view(request):
-#     if request.method == 'POST':
-#         repo = get_user_registration_repository()
+def signup(request):
+    if request.method == 'POST':
+        form = CombinedRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+        else:
+            pass
+
+    else:
+        form = CombinedRegistrationForm()
+        # repo = get_user_registration_repository()
+
+        # email = request.POST.get('email')
+        # password = request.POST.get('password')
+        # user_type = request.POST.get('user_type')
         
-#         try:
-#             user_data = {
-#                 'first_name': request.POST.get('first_name', ''),
-#                 'last_name': request.POST.get('last_name', ''),
-#                 'email': request.POST.get('email', ''),
-#                 'username': request.POST.get('username', ''),
-#                 'password': request.POST.get('password', '')
-#             }
-            
-#             repo.create(user_data)
-#             messages.success(request, "Registration successful!")
-            
-#             return redirect('home')
-#         except Exception as e:
-#             return redirect('register')
-#     else:
-#         return redirect('register')
+        # user_data = {
+        #     'email': email,
+        #     'password': password,
+        #     'user_type': user_type
+        # }
+        
+        # if user_type == 'creator':
+        #     user_data['youtube_channel'] = request.POST.get('youtube_channel')
+        #     user_data['brand_name'] = request.POST.get('brand_name')
+        # elif user_type == 'editor':
+        #     user_data['display_name'] = request.POST.get('display_name')
+        #     user_data['expertise_tags'] = request.POST.get('expertise_tags')
+        
+        # try:
+        #     repo.create(user_data)
+        #     logger.success(request, 'Account created successfully')
+        #     return redirect('home')
+        # except Exception as e:
+        #     logger.error(request, f'Error creating account: {str(e)}')
+        #     return redirect('home')
+    
+    return redirect('home')
 
 def login_view(request):
-    if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        user = authenticate(request, username=email, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("dashboard")
-        else:
-            messages.error(request, "Invalid email or password.")
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        remember_me = request.POST.get('remember_me') == 'on'
+        
+        try:
+            user = repo_login(email, password)
+            
+            if user is not None:
+                login(request, user)
+                
+                if not remember_me:
+                    request.session.set_expiry(0)  # Session expires when browser closes
+                
+                messages.success(request, 'Login successful')
+                return redirect('home')  # Redirect to dashboard or appropriate page
+            else:
+                messages.error(request, 'Invalid email or password')
+        except Exception as e:
+            messages.error(request, f'Error during login: {str(e)}')
+        
+        return redirect('login')
+    
+    return render(request, 'login.html')
+
+def repo_login(email, password):
+    # This function should implement the actual login logic
+    # It should verify the email and password against your database or authentication system
+    # Return a user object if login is successful, None otherwise
+    # Example:
+    user = authenticate(email=email, password=password)
+    return user
     
     return render(request, "login.html")
 
@@ -78,13 +121,6 @@ def apply_view(request):
             return redirect('apply')
     else:
         return redirect('apply')
-
-
-def dashboard(request):
-    return render(request, 'dashboard.html')
-
-def register(request):
-    return render(request, 'register.html')
 
 def login(request):
     return render(request, 'login.html')

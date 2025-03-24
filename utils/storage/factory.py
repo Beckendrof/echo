@@ -10,11 +10,11 @@ from utils.storage.file_storage import (
 # For future use
 from utils.storage.db_storage import (
     JobApplicationDbStorage,
-    UserRegistrationDbStorage
+    UserDbStorage
 )
 
 # Current mode - change to 'db' when ready to use database
-STORAGE_MODE = 'file'
+STORAGE_MODE = 'db'
 
 def get_job_application_repository():
     """Get the appropriate job application repository"""
@@ -28,4 +28,4 @@ def get_user_registration_repository():
     if STORAGE_MODE == 'file':
         return UserRegistrationFileStorage()
     else:
-        return UserRegistrationDbStorage()
+        return UserDbStorage()

@@ -27,3 +27,40 @@ class UserRegistration(models.Model):
     last_name = models.CharField(max_length=100)
     password = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
+
+import uuid
+
+class User(models.Model):
+    USER_TYPES = [
+        ('creator', 'Creator'),
+        ('editor', 'Editor'),
+    ]
+
+    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True, max_length=255, db_index=True)
+    password_hash = models.CharField(max_length=97)  # Bcrypt hash (salt + hash)
+    user_type = models.CharField(max_length=7, choices=USER_TYPES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
+
+class Creator(models.Model):
+    creator_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='creator_profile')
+    youtube_channel = models.CharField(max_length=24)
+    brand_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.brand_name
+
+class Editor(models.Model):
+    editor_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='editor_profile')
+    display_name = models.CharField(max_length=50)
+    expertise_tags = models.JSONField()
+
+    def __str__(self):
+        return self.display_name
