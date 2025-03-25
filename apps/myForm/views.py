@@ -1,10 +1,23 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserLoginForm
 from .models import User, Creator, Editor
 
 def login(request):
-    return render(request, 'login.html')
+    form = UserLoginForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'login.html', context)
+
+def login_success(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = User.objects.get(email=email, password=password)
+        if user:
+            print('User found')
+            return redirect('home')
+    return login(request)
 
 def signup(request):
     if request.method == 'POST':
@@ -35,9 +48,9 @@ def signup(request):
 
 def home(request):
     form = UserRegistrationForm()
-    users = User.objects.all()
+    user = User.objects.all()
     context = {
         'form': form,
-        'users': users
+        'user': user
     }
     return render(request, 'home.html', context)

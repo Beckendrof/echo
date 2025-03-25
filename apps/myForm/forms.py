@@ -86,3 +86,31 @@ class UserRegistrationForm(forms.Form):
                 raise forms.ValidationError("Display Name and Expertise Tags are required for Editors.")
 
         return cleaned_data
+
+class UserLoginForm(forms.Form):
+    email = forms.EmailField(
+        label="Email address",
+        widget=forms.EmailInput(attrs={
+            "id": "email",
+            "class": "w-full px-3 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent",
+            "placeholder": "you@example.com"
+        })
+    )
+    
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(attrs={
+            "id": "password",
+            "class": "w-full px-3 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent",
+            "placeholder": "••••••••"
+        })
+    )
+    
+    remember_me = forms.BooleanField(
+        label="Remember me",
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            "id": "remember_me",
+            "class": "h-4 w-4 text-gray-900 border-gray-300 rounded focus:ring-gray-400"
+        })
+    )
