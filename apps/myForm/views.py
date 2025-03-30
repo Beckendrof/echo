@@ -1,78 +1,56 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from utils.storage.factory import get_job_application_repository, get_user_registration_repository
+from .forms import UserRegistrationForm, UserLoginForm
+from .models import User, Creator, Editor
 
-def register_view(request):
+def login(request):
+    form = UserLoginForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'login.html', context)
+
+def login_success(request):
     if request.method == 'POST':
-        repo = get_user_registration_repository()
-        
-        try:
-            user_data = {
-                'first_name': request.POST.get('first_name', ''),
-                'last_name': request.POST.get('last_name', ''),
-                'email': request.POST.get('email', ''),
-                'username': request.POST.get('username', ''),
-                'password': request.POST.get('password', '')
-            }
-            
-            repo.create(user_data)
-            messages.success(request, "Registration successful!")
-            
+        email = request.POST['email']
+        password = request.POST['password']
+        user = User.objects.get(email=email, password=password)
+        if user:
+            print('User found')
             return redirect('home')
-        except Exception as e:
-            return redirect('register')
-    else:
-        return redirect('register')
+    return login(request)
 
-
-
-def apply_view(request):
+def signup(request):
     if request.method == 'POST':
-        # Get repository
-        repo = get_job_application_repository()
-        
-        # Create application
-        application_data = {
-            'first_name': request.POST.get('first_name', ''),
-            'last_name': request.POST.get('last_name', ''),
-            'email': request.POST.get('email', ''),
-            'phone': request.POST.get('phone', '')
-        }
+        user = User(
+            user_type = request.POST['user_type'],
+            email = request.POST['email'],
+            password = request.POST['password']
+        )
+        user.save()
 
-        if 'resume' in request.FILES:
-            application_data['resume'] = request.FILES['resume']
-        
-        # Save application
-        application = repo.create(application_data)
-        
-        # Save job experiences
-        job_titles = request.POST.getlist('job_title[]')
-        company_names = request.POST.getlist('company_name[]')
-        years_worked = request.POST.getlist('years[]')
-        
-        try:
-            for i in range(len(job_titles)):
-                if i < len(company_names) and i < len(years_worked):
-                    experience_data = {
-                        'job_title': job_titles[i],
-                        'company_name': company_names[i],
-                        'years': int(years_worked[i])
-                    }
-                    repo.create_related(application['id'], experience_data)
-            
-            messages.success(request, "Application submitted successfully!")
-            return redirect('home')
-        except Exception as e:
-            return redirect('apply')
+        if user.user_type == 'creator':
+            creator = Creator(
+                user = user,
+                youtube_channel = request.POST['youtube_channel'],
+                brand_name = request.POST['brand_name']
+            )
+            creator.save
+        else:
+            editor = Editor(
+                user = user,
+                display_name = request.POST['display_name']
+            )
+            editor.save()
+        return redirect('login')
     else:
-        return redirect('apply')
+        form = UserRegistrationForm()
+        return render(request, 'home.html', {'form': form})
 
-
-def apply(request):
-    return render(request, 'apply.html')
-
-def register(request):
-    return render(request, 'register.html')
-
-def home_view(request):
-    return render(request, 'home.html')
+def home(request):
+    form = UserRegistrationForm()
+    user = User.objects.all()
+    context = {
+        'form': form,
+        'user': user
+    }
+    return render(request, 'home.html', context)
